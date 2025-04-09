@@ -24,4 +24,4 @@ webhooks:
     scope: "Namespaced"
   namespaceSelector:
     matchLabels:
-      lxcfs-admission-webhook: enabled
+      ${NAMESPACE_SELECTOR_LABEL}

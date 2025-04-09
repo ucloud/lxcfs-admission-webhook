@@ -143,6 +143,10 @@ To get a local copy up and running follow these simple example steps.
    cd deploy
    ./install.sh
    ```
+   Default enabled for namespaces other than kube-system or kube-public with `--enable-default` parameter.
+   ```sh
+   ./install.sh --enable-default
+   ``` 
 4. Go to [usage](#usage) section see how to usage
 5. Uninstall
 
@@ -161,6 +165,7 @@ To get a local copy up and running follow these simple example steps.
 ## Usage
 
 1. Add lable `lxcfs-admission-webhook=enabled` to namespace which you want to correct the linux container's CGroup-view.
+   This can be ignored when installed with `--enable-default` parameter.
    ```sh
    kubectl label namespaces your_namespace lxcfs-admission-webhook=enabled
    ```

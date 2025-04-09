@@ -14,7 +14,7 @@ defined resources name:
   --secret            LXCFS admission webhook mutating secret name, default: lxcfs-admission-webhook
   --daemonset         LXCFS daemonset name, default: lxcfs-ds
   --mutating          mutating admission name, default: lxcfs-admission-webhook
-
+  --enable-default    enable for all user namespace
   --create-cert-only  generate a self-signed certificate in current directory
 
 EOF
@@ -111,6 +111,7 @@ create_k8s_resources() {
   export WH_SECRET
   export MUTATING_WH_CONFIG
   export LXCFS_DS
+  export NAMESPACE_SELECTOR_LABEL
 
   # 1 Deploy lxcfs daemonset
   envsubst <"$PWD"/lxcfs-daemonset.tpl.yaml | kubectl create -n "${NAMESPACE}" -o yaml --dry-run=client -f - | kubectl -n "${NAMESPACE}" apply -f -
@@ -143,6 +144,7 @@ main() {
   MUTATING_WH_CONFIG=lxcfs-admission-webhook
   LXCFS_DS=lxcfs-ds
   CREATE_CERT_ONLY=false
+  NAMESPACE_SELECTOR_LABEL='lxcfs-admission-webhook: enabled'
 
   if [[ $# -ge 1 ]]; then
     case $1 in
@@ -172,6 +174,10 @@ main() {
       ;;
     --create-cert-only)
       CREATE_CERT_ONLY=true
+      shift
+      ;;
+    --enable-default | -e)
+      NAMESPACE_SELECTOR_LABEL=''
       shift
       ;;
     --help | -h)
