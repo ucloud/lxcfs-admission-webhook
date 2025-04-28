@@ -30,7 +30,7 @@ spec:
                       - linux
       containers:
         - name: lxcfs
-          image: uhub.service.ucloud.cn/fpctest123456/lxcfs-test:v0.5
+          image: uhub.service.ucloud.cn/uk8s/lxcfs-ucloud:6.0.1
           imagePullPolicy: Always
           securityContext:
             privileged: true
