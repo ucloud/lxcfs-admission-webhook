@@ -8,7 +8,7 @@ RUN apk add --no-cache make git && make build
 
 FROM alpine:3.15
 
-LABEL maintainer="ymping <ympiing@gmail.com>"
+LABEL maintainer="wangrenzheng <renzheng.wang@ucloud.cn>"
 
 WORKDIR /lxcfs
 

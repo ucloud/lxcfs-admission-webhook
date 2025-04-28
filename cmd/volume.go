@@ -17,55 +17,47 @@ const lxcfsVol = "lxcfs"
 var volumeMountsTemplate = []corev1.VolumeMount{
 
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-cpuinfo",
 		MountPath: "/proc/cpuinfo",
-		SubPath:   "lxcfs/proc/cpuinfo",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
-		MountPath: "/proc/diskstats",
-		SubPath:   "lxcfs/proc/diskstats",
-		ReadOnly:  true,
-	},
-	{
-		Name:      lxcfsVol,
-		MountPath: "/proc/loadavg",
-		SubPath:   "lxcfs/proc/loadavg",
-		ReadOnly:  true,
-	},
-	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-meminfo",
 		MountPath: "/proc/meminfo",
-		SubPath:   "lxcfs/proc/meminfo",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-diskstats",
+		MountPath: "/proc/diskstats",
+		ReadOnly:  true,
+	},
+	{
+		Name:      "lxcfs-proc-stat",
 		MountPath: "/proc/stat",
-		SubPath:   "lxcfs/proc/stat",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-swaps",
 		MountPath: "/proc/swaps",
-		SubPath:   "lxcfs/proc/swaps",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-uptime",
 		MountPath: "/proc/uptime",
-		SubPath:   "lxcfs/proc/uptime",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs-proc-loadavg",
+		MountPath: "/proc/loadavg",
+		ReadOnly:  true,
+	},
+	{
+		Name:      "lxcfs-sys-devices-system-cpu-online",
 		MountPath: "/sys/devices/system/cpu/online",
-		SubPath:   "lxcfs/sys/devices/system/cpu/online",
 		ReadOnly:  true,
 	},
 	{
-		Name:      lxcfsVol,
+		Name:      "lxcfs",
 		MountPath: "/var/lib/lxc/",
 		ReadOnly:  true,
 		MountPropagation: func() *corev1.MountPropagationMode {
@@ -76,6 +68,102 @@ var volumeMountsTemplate = []corev1.VolumeMount{
 }
 
 var volumesTemplate = []corev1.Volume{
+	{
+		Name: "lxcfs-proc-cpuinfo",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/cpuinfo",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-diskstats",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/diskstats",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-meminfo",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/meminfo",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-stat",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/stat",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-swaps",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/swaps",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-uptime",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/uptime",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-proc-loadavg",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/proc/loadavg",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
+	{
+		Name: "lxcfs-sys-devices-system-cpu-online",
+		VolumeSource: corev1.VolumeSource{
+			HostPath: &corev1.HostPathVolumeSource{
+				Path: "/var/lib/lxc/lxcfs/sys/devices/system/cpu/online",
+				Type: func() *corev1.HostPathType {
+					pt := corev1.HostPathFile
+					return &pt
+				}(),
+			},
+		},
+	},
 	{
 		Name: lxcfsVol,
 		VolumeSource: corev1.VolumeSource{
