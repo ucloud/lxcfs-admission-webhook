@@ -38,9 +38,9 @@ The following one flag are required
 EOF
 }
 
-# check python3, nsenter, crictl or docker command exist on k8s cluster
+# check jq, nsenter, crictl or docker command exist on k8s cluster
 pre_check() {
-  for c in python3 nsenter; do
+  for c in jq nsenter; do
     if ! command -v $c >/dev/null; then
       echo $c not found on host, exit
       exit 2
@@ -159,7 +159,7 @@ crictl_cli() {
   for pod in $pods; do
     containers=$(crictl ps --quiet --pod "$pod")
     for container in $containers; do
-      pid=$(crictl inspect --output=json "$container" | python3 -c "import sys, json; print(json.load(sys.stdin)['info']['pid'])")
+      pid=$(crictl inspect --output=json "$container" | jq -r '.info.pid')
       echo "adjust lxcfs mount in container $container on $(hostname) with crictl"
       lxcfs_mount "$pid"
     done
