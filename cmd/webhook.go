@@ -223,20 +223,23 @@ func patchVolume(target, added []corev1.Volume) (patches []patchOperation) {
 }
 
 func patchAnnotation(target, added map[string]string) (patches []patchOperation) {
+	if target == nil {
+		patches = append(patches, patchOperation{
+			Op:    "add",
+			Path:  "/metadata/annotations",
+			Value: map[string]string{},
+		})
+	}
 	for key, value := range added {
 		var op = patchOperation{
-			Op:   "add",
-			Path: "/metadata/annotations",
-			Value: map[string]string{
-				key: value,
-			},
+			Op:    "add",
+			Path:  "/metadata/annotations/" + escapeJSONPointerValue(key),
+			Value: value,
 		}
 
 		if target != nil {
 			if _, ok := target[key]; ok {
 				op.Op = "replace"
-				op.Path = "/metadata/annotations/" + escapeJSONPointerValue(key)
-				op.Value = value
 			}
 		}
 
@@ -288,7 +291,6 @@ func (whsvr *WebhookServer) mutate(admissionReview *admissionv1.AdmissionReview)
 			},
 		}
 	}
-
 	glog.Infof("AdmissionReview for Kind=%v, Namespace=%v Name=%v (%v) UID=%v patchOperation=%v UserInfo=%v",
 		admissionRequest.Kind, admissionRequest.Namespace, admissionRequest.Name, pod.GenerateName, admissionRequest.UID, admissionRequest.Operation, admissionRequest.UserInfo)
 
@@ -318,6 +320,8 @@ func (whsvr *WebhookServer) mutate(admissionReview *admissionv1.AdmissionReview)
 			},
 		}
 	}
+
+	glog.Infof("AdmissionReview for Pod=%v, patch=%v", string(admissionRequest.Object.Raw), string(patchBytes))
 
 	return &admissionv1.AdmissionResponse{
 		Allowed: true,
