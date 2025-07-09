@@ -17,8 +17,10 @@ spec:
     spec:
       hostPID: true
       tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoSchedule
+        operator: Exists
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -30,7 +32,7 @@ spec:
                       - linux
       containers:
         - name: lxcfs
-          image: uhub.service.ucloud.cn/uk8s/lxcfs-ucloud:6.0.1
+          image: uhub.service.ucloud.cn/uk8s/lxcfs-ucloud:6.0.2
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -51,6 +53,9 @@ spec:
             limits:
               cpu: "500m"
               memory: "128Mi"
+            requests:
+              cpu: 50m
+              memory: 10Mi
           volumeMounts:
             - name: cgroup
               mountPath: /sys/fs/cgroup
